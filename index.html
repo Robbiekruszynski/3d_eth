@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <title>Three.js 3D ETH logo</title>
+
+    <style>
+      body {
+        margin: 0;
+      }
+      canvas {
+        width: 100%;
+        height: 100;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="js/three.js"></script>
+
+    <script>
+      let scene = new THREE.Scene();
+      let camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerheight,
+        0.1,
+        1000
+      );
+      let renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      //draw Scene
+      let update = function () {};
+
+      let render = function () {
+        renderer.render(scene, camera);
+      };
+
+      //run loop (update, render, repeat)
+      let GameLoop = function () {
+        requestAnimationFrame(GameLoop);
+        update();
+        render();
+      };
+      GameLoop();
+    </script>
+  </body>
+</html>
