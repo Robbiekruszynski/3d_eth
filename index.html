@@ -1,46 +1,73 @@
 <html>
   <head>
-    <title>Three.js 3D ETH logo</title>
+    <title> 3D ETH demo </title>
 
     <style>
-      body {
-        margin: 0;
-      }
-      canvas {
-        width: 100%;
-        height: 100;
-      }
+      body { margin: 0; }
+      canvas { width: 100%; height: 100%;};
     </style>
   </head>
-  <body>
-    <script src="js/three.js"></script>
 
+  <body>
+    <script src = "js/three.js"></script>
+    <script src="js/OrbitControls.js"></script>
     <script>
-      let scene = new THREE.Scene();
-      let camera = new THREE.PerspectiveCamera(
-        75,
-        window.innerWidth / window.innerheight,
-        0.1,
-        1000
-      );
-      let renderer = new THREE.WebGLRenderer();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      let scene = new THREE.Scene( );
+      let camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+      let renderer = new THREE.WebGLRenderer({ alpha: true } );
+      renderer.setSize(window.innerWidth, window.innerHeight );
+      renderer.setClearColor( 0xffffff, 0);
       document.body.appendChild(renderer.domElement);
 
+      window.addEventListener('resize', function() {
+        let width = window.innerWidth;
+        let height = window.innerHeight;
+
+        renderer.setSize( width, height );
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix( );
+      });
+
+      controls = new THREE.OrbitControls(camera, renderer.domElement )
+
+      // create the shape
+      let geometry = new THREE.BoxGeometry( 2, 2, 2 );
+       let cubeMaterials =
+      [
+        new THREE.MeshBasicMaterial ( {map: new THREE.TextureLoader().load('img/eth.png'), side: THREE.DoubleSide }),
+        new THREE.MeshBasicMaterial ( {map: new THREE.TextureLoader().load('img/eth.png'), side: THREE.DoubleSide }),
+        new THREE.MeshBasicMaterial ( {map: new THREE.TextureLoader().load('img/eth.png'), side: THREE.DoubleSide }),
+        new THREE.MeshBasicMaterial ( {map: new THREE.TextureLoader().load('img/eth.png'), side: THREE.DoubleSide }),
+        new THREE.MeshBasicMaterial ( {map: new THREE.TextureLoader().load('img/eth.png'), side: THREE.DoubleSide }),
+        new THREE.MeshBasicMaterial ( {map: new THREE.TextureLoader().load('img/eth.png'), side: THREE.DoubleSide })
+      ];
+
+      //create a material, color or image texture
+      let material = new THREE.MeshFaceMaterial(cubeMaterials);
+      let cube = new THREE.Mesh( geometry, material );
+      scene.add ( cube );
+
+      camera.position.z = 3;
+      //game logic
+
+      let update = function(){
+        cube.rotation.x += 0.001;
+        cube.rotation.y += 0.005;
+        cube.rotation.z += 0.002;
+      }
+
       //draw Scene
-      let update = function () {};
+    let render = function() {
+      renderer.render (scene, camera);
 
-      let render = function () {
-        renderer.render(scene, camera);
-      };
+    };
+    //run game loop (update, render, repeat)
+    let GameLoop = function () {
+    requestAnimationFrame (GameLoop);
+    update();
+    render();
 
-      //run loop (update, render, repeat)
-      let GameLoop = function () {
-        requestAnimationFrame(GameLoop);
-        update();
-        render();
-      };
-      GameLoop();
+    };
+    GameLoop();
     </script>
-  </body>
 </html>
